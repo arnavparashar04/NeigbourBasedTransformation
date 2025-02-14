@@ -1,5 +1,5 @@
 #include <iostream>
-long long POR(long long num);
+long long NBT(long long num);
 
 long long decimalToBinaryNumber(int num)
 {
