@@ -1,71 +1,57 @@
 #include <iostream>
+#include <vector>
+
 long long NBT(long long num);
 
-long long decimalToBinaryNumber(int num)
+std::vector<int> toBinaryVector(int num)
 {
-    long long binaryNumber = 0;
-    long long placeValue = 1;
+    std::vector<int> binary;
     while (num > 0)
     {
-        int bit = num % 2;
-        binaryNumber += bit * placeValue;
-        placeValue *= 10;
+        binary.push_back(num % 2);
         num /= 2;
     }
-    return binaryNumber;
+    return binary;
 }
+
 int main()
 {
     int num;
     std::cout << "Enter a number: ";
     std::cin >> num;
-    long long binaryNum = decimalToBinaryNumber(num);
-    std::cout << binaryNum << std::endl;
-    std::cout << "Neigbour Based Transformation:" << std::endl;
-    std::cout << NBT(binaryNum) << std::endl;
+
+    std::vector<int> binaryNum = toBinaryVector(num);
+
+    std::cout << "Binary: ";
+    for (auto it = binaryNum.rbegin(); it != binaryNum.rend(); ++it)
+    {
+        std::cout << *it;
+    }
+    std::cout << std::endl;
+
+    std::cout << "Neighbor Based Transformation:" << std::endl;
+    std::cout << NBT(num) << std::endl;
+
     return 0;
 }
 
 long long NBT(long long num)
 {
-    long long temp_num = num;
-    if (temp_num == 0)
-        return 1;
-    int count = 0;
-    if (temp_num < 0)
+    std::vector<int> binary = toBinaryVector(num);
+    size_t count = binary.size();
+
+    std::vector<int> transformed(count, 0);
+
+    for (size_t i = 0; i < count - 1; i++)
     {
-        temp_num *= -1;
+        transformed[i] = binary[i] ^ binary[i + 1]; // XOR neighbors
     }
-    while (temp_num > 0)
-    {
-        temp_num /= 10;
-        count++;
-    }
-    long long m = 1;
-    for (int i = 0; i <= count; i++)
-    {
-        m *= 10;
-    }
-    num += m;
-    int a[count + 1] = {0};
-    for (int i = 0; i <= count; i++)
-    {
-        a[i] = num % 10;
-        num /= 10;
-    }
-    for (int i = 0; i < count; i++)
-    {
-        if (a[i] == 0 && a[i + 1] == 1)
-            a[i] = 1;
-        else if (a[i] == 1 && a[i + 1] == 0)
-            a[i] = 1;
-        else
-            a[i] = 0;
-    }
+
     long long result = 0;
-    for (int i = count; i >= 0; i--)
+    for (size_t i = 0; i < count; i++)
     {
-        result = result * 10 + a[i];
+        result = (result << 1) | transformed[i]; // Convert back to integer
     }
+
     return result;
 }
