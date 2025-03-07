@@ -44,13 +44,13 @@ long long NBT(long long num)
 
     for (size_t i = 0; i < count - 1; i++)
     {
-        transformed[i] = binary[i] ^ binary[i + 1]; // XOR neighbors
+        transformed[i] = binary[i] ^ binary[i + 1]; 
     }
 
     long long result = 0;
     for (size_t i = 0; i < count; i++)
     {
-        result = (result << 1) | transformed[i]; // Convert back to integer
+        result = (result << 1) | transformed[i]; 
     }
 
     return result;
